@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <!-- FIELD GOAL -->
+  <div class="col-lg-4 mb-4">
+    <div class="card p-3">
+      <h2 class="h5 mb-3" style="color:#c90016;">Field Goal</h2>
+      <form method="POST">
+        <input type="hidden" name="action" value="save_kick">
+        <input type="hidden" name="kick_type" value="Field Goal">
+        <div class="form-group">
+          <label>Kicker</label>
+          <select class="form-control" name="kicker" required>
+            <option>29</option><option>92</option><option>82</option><option>95</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Holder</label>
+          <select class="form-control" name="holder" required>
+            <option>95</option><option>82</option><option>92</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Longsnapper</label>
+          <select class="form-control" name="longsnapper" required>
+            <option>58</option><option>61</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label>Yard Line</label>
+            <input class="form-control" id="fg_yl" name="fg_yard_line" readonly onclick="openKeypad('fg_yl')" placeholder="+/-">
+          </div>
+          <div class="form-group col-6">
+            <label>Hash</label>
+            <select class="form-control" name="fg_hash" required>
+              <option>Left</option><option>Left Middle</option><option>Middle</option><option>Right Middle</option><option>Right</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Result</label>
+          <select class="form-control" name="fg_result">
+            <option>Good</option><option>No Good</option>
+          </select>
+        </div>
+        <div class="text-center my-2">
+          <div class="timer-display" id="fg_timer">0.000 s</div>
+          <input type="hidden" name="fg_op_time" id="fg_op_time">
+          <div class="mt-2">
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="sw.fg.start()">Start</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="sw.fg.stop()">Stop</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="sw.fg.reset()">Reset</button>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Save Field Goal</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- KICKOFF -->
+  <div class="col-lg-4 mb-4">
+    <div class="card p-3">
+      <h2 class="h5 mb-3" style="color:#c90016;">Kickoff</h2>
+      <form method="POST">
+        <input type="hidden" name="action" value="save_kick">
+        <input type="hidden" name="kick_type" value="Kickoff">
+        <div class="form-group">
+          <label>Kicker</label>
+          <select class="form-control" name="kicker" required>
+            <option>29</option><option>92</option><option>82</option><option>95</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label>Yard Line</label>
+            <input class="form-control" id="ko_yl" name="ko_yard_line" readonly onclick="openKeypad('ko_yl')" placeholder="+/-">
+          </div>
+          <div class="form-group col-6">
+            <label>Hash</label>
+            <select class="form-control" name="ko_hash" required>
+              <option>Left</option><option>Left Middle</option><option>Middle</option><option>Right Middle</option><option>Right</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label>Result Yard Line</label>
+            <input class="form-control" id="ko_res_yl" name="ko_result_yard_line" readonly onclick="openKeypad('ko_res_yl')" placeholder="+/-">
+          </div>
+          <div class="form-group col-6">
+            <label>Landing Location</label>
+            <select class="form-control" name="ko_location">
+              <option>Left</option><option>Left Middle</option><option>Middle</option><option>Right Middle</option><option>Right</option>
+            </select>
+          </div>
+        </div>
+        <div class="text-center my-2">
+          <div class="timer-display" id="ko_timer">0.000 s</div>
+          <input type="hidden" name="ko_hang_time" id="ko_hang_time">
+          <div class="mt-2">
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="sw.ko.start()">Start</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="sw.ko.stop()">Stop</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="sw.ko.reset()">Reset</button>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Save Kickoff</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- PUNT -->
+  <div class="col-lg-4 mb-4">
+    <div class="card p-3">
+      <h2 class="h5 mb-3" style="color:#c90016;">Punt</h2>
+      <form method="POST">
+        <input type="hidden" name="action" value="save_kick">
+        <input type="hidden" name="kick_type" value="Punt">
+        <div class="form-group">
+          <label>Kicker</label>
+          <select class="form-control" name="kicker" required>
+            <option>29</option><option>92</option><option>82</option><option>95</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Longsnapper</label>
+          <select class="form-control" name="longsnapper" required>
+            <option>58</option><option>61</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label>Kick Yard Line</label>
+            <input class="form-control" id="punt_kyl" name="punt_kick_yl" readonly onclick="openKeypad('punt_kyl')" placeholder="+/-">
+          </div>
+          <div class="form-group col-6">
+            <label>Kick Location</label>
+            <select class="form-control" name="punt_kick_loc">
+              <option>Left</option><option>Left Middle</option><option>Middle</option><option>Right Middle</option><option>Right</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label>Landed Yard Line</label>
+            <input class="form-control" id="punt_lyl" name="punt_landed_yl" readonly onclick="openKeypad('punt_lyl')" placeholder="+/-">
+          </div>
+          <div class="form-group col-6">
+            <label>Landed Location</label>
+            <select class="form-control" name="punt_landed_loc">
+              <option>Left</option><option>Left Middle</option><option>Middle</option><option>Right Middle</option><option>Right</option>
+            </select>
+          </div>
+        </div>
+        <div class="text-center my-2">
+          <div class="timer-display" id="punt_timer">Snap 0.000 | H2F 0.000 | Hang 0.000</div>
+          <input type="hidden" name="punt_snap_time" id="punt_snap_time">
+          <input type="hidden" name="punt_hand_to_foot" id="punt_hand_to_foot">
+          <input type="hidden" name="punt_hang_time" id="punt_hang_time">
+          <div class="mt-2">
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="sw.punt.start()">Start</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="sw.punt.breakPhase()">Break</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="sw.punt.stop()">Stop</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="sw.punt.reset()">Reset</button>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Save Punt</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="text-right">
+  <a class="btn btn-outline-primary" href="{{ url_for('end_session') }}">End Session (PDF)</a>
+</div>
+
+<!-- Keypad Modal -->
+<div class="modal fade" id="keypadModal" tabindex="-1" role="dialog" aria-labelledby="keypadModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-black text-light">
+      <div class="modal-header">
+        <h5 class="modal-title" id="keypadModalLabel">Enter Yard Line</h5>
+        <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close" onclick="keypad.clear()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <input type="text" class="form-control mb-3 text-center" id="keypadInput" value="" readonly>
+        <div class="btn-group btn-group-lg d-flex flex-wrap" role="group" aria-label="Keypad">
+          {% for n in range(1,10) %}
+          <button type="button" class="btn btn-outline-primary m-1 keypad-btn" onclick="keypad.press('{{n}}')">{{n}}</button>
+          {% endfor %}
+          <button type="button" class="btn btn-outline-primary m-1 keypad-btn" onclick="keypad.toggleSign()">±</button>
+          <button type="button" class="btn btn-outline-primary m-1 keypad-btn" onclick="keypad.press('0')">0</button>
+          <button type="button" class="btn btn-outline-primary m-1 keypad-btn" onclick="keypad.clear()">C</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="keypad.apply()">Apply</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

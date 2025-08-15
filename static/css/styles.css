@@ -1,0 +1,27 @@
+
+/* Harvard-only palette */
+:root{ --bg:#000; --panel:#0b0b0b; --crimson:#c90016; --text:#fff; --muted:#ccc; --line:#2a2a2a; }
+html,body{ background:var(--bg); color:var(--text); }
+.card{ background:var(--panel); border:1px solid var(--line); border-radius:16px; }
+h1,h2,h3,h4,h5{ color:var(--text); }
+a{ color:var(--crimson); }
+.btn-primary{ background:var(--crimson); border-color:var(--crimson); }
+.btn-outline-primary{ color:var(--crimson); border-color:var(--crimson); }
+.btn-outline-primary:hover{ background:var(--crimson); color:#fff; }
+.form-control{ background:#111; color:var(--text); border:1px solid var(--line); border-radius:10px; }
+.form-control:focus{ box-shadow:none; border-color:var(--crimson); }
+.flash li{ list-style:none; background:#121212; padding:10px 14px; border-left:4px solid var(--crimson); border-radius:8px; margin:8px 0; }
+.timer-display{ font-family: ui-monospace, Menlo, Consolas, monospace; font-size:1.1rem; }
+.keypad-btn{ width:30%; }
+
+
+/* Keypad input visibility - white on black */
+#keypadInput{
+  color:#fff !important;
+  background:#000 !important;
+  text-align:center;
+  font-size:2rem;
+  border:1px solid #444;
+  border-radius:10px;
+}
+.modal-content.bg-black{ background:#000 !important; color:#fff !important; }
