@@ -8,6 +8,8 @@ from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
+import datetime
+from flask import request, session, redirect, url_for, flash
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev-change-me")
@@ -35,6 +37,17 @@ def distance_from_to(a, b):
     return abs(bb - aa)
 
 # --- Routes ---
+@app.route('/start_session', methods=['POST'])
+def start_session():
+    client_date = request.form.get('client_date')
+    if client_date:
+        session['workout_date'] = client_date
+    else:
+        session['workout_date'] = datetime.date.today().isoformat()
+    session['workout_data'] = []   # reset the entries for the new session
+    flash('New session started.')
+    return redirect(url_for('index'))
+    
 @app.route("/", methods=["GET","POST"])
 def index():
     if "workout_date" not in session:
