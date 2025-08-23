@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 </div>
 
-<!-- Side Drawer -->
+<!-- Side Drawer + Yard-line Input Styling -->
 <style>
 .drawer{ position: fixed; top:0; right:-360px; width:360px; height:100%; background:#0c0c0c; color:#fff; border-left:1px solid #2a2a2a; z-index:1050; transition:right .25s ease; display:flex; flex-direction:column; }
 .drawer.open{ right:0; }
@@ -238,6 +238,14 @@ document.addEventListener("DOMContentLoaded", () => {
 .kick-item{ padding:10px 16px; border-bottom:1px solid #1a1a1a; cursor:pointer; }
 .kick-item:hover{ background:#121212; }
 .badge-type{ font-size:.75rem; border:1px solid #2a2a2a; padding:2px 6px; border-radius:999px; margin-right:6px; }
+
+/* <<< Yard-line inputs are now black bg / white text >>> */
+#fg_yl, #ko_yl, #ko_res_yl, #punt_kyl, #punt_lyl {
+  background-color:#000 !important;
+  color:#fff !important;
+  border:1px solid #444 !important;
+  text-align:center;
+}
 </style>
 
 <div id="kicksDrawer" class="drawer" aria-hidden="true">
@@ -327,7 +335,7 @@ document.getElementById('openDrawerBtn').addEventListener('click', (e)=>{
 function drawerOpen(){ drawer.el.classList.add('open'); drawer.backdrop.classList.add('open'); }
 function drawerClose(){ drawer.el.classList.remove('open'); drawer.backdrop.classList.remove('open'); }
 
-// ----- Summaries & distances (client side quick labels) -----
+// ----- Summaries (client labels) -----
 function summarizeKick(k){
   const type = k['Kick Type'] || '';
   let dist = '';
@@ -481,7 +489,7 @@ function applyLastUsed() {
 }
 document.addEventListener('DOMContentLoaded', applyLastUsed);
 
-// ----- Wire drawer close on ESC -----
+// ----- ESC to close drawer -----
 document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') drawerClose(); });
 </script>
 {% endblock %}
