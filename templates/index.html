@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
+<form action="{{ url_for('start_session') }}" method="post" class="mb-4">
+  <input type="hidden" id="client_date" name="client_date">
+  <button type="submit" class="btn btn-primary">Start New Session</button>
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const today = new Date().toISOString().split('T')[0];
+  const hidden = document.getElementById('client_date');
+  if (hidden) hidden.value = today;
+});
+</script>
 <div class="row">
   <!-- FIELD GOAL -->
   <div class="col-lg-4 mb-4">
