@@ -1,9 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
+<!-- Start New Session (iPad date) -->
 <form action="{{ url_for('start_session') }}" method="post" class="mb-4">
   <input type="hidden" id="client_date" name="client_date">
   <button type="submit" class="btn btn-primary">Start New Session</button>
 </form>
+
+<!-- Drawer open button -->
+<div class="mb-3 d-flex">
+  <button class="btn btn-outline-primary" type="button" id="openDrawerBtn">
+    View / Edit Kicks
+  </button>
+</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -12,29 +20,30 @@ document.addEventListener("DOMContentLoaded", () => {
   if (hidden) hidden.value = today;
 });
 </script>
+
 <div class="row">
   <!-- FIELD GOAL -->
   <div class="col-lg-4 mb-4">
     <div class="card p-3">
       <h2 class="h5 mb-3" style="color:#c90016;">Field Goal</h2>
-      <form method="POST">
+      <form method="POST" onsubmit="saveLastUsed()">
         <input type="hidden" name="action" value="save_kick">
         <input type="hidden" name="kick_type" value="Field Goal">
         <div class="form-group">
           <label>Kicker</label>
-          <select class="form-control" name="kicker" required>
+          <select class="form-control" name="kicker" id="fg_kicker" required>
             <option>29</option><option>92</option><option>82</option><option>95</option>
           </select>
         </div>
         <div class="form-group">
           <label>Holder</label>
-          <select class="form-control" name="holder" required>
-            <option>95</option><option>82</option><option>92</option>
+          <select class="form-control" name="holder" id="fg_holder" required>
+            <option>95</option><option>82</option><option>92</option><option>9</option>
           </select>
         </div>
         <div class="form-group">
           <label>Longsnapper</label>
-          <select class="form-control" name="longsnapper" required>
+          <select class="form-control" name="longsnapper" id="fg_longsnapper" required>
             <option>58</option><option>61</option>
           </select>
         </div>
@@ -45,14 +54,14 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <div class="form-group col-6">
             <label>Hash</label>
-            <select class="form-control" name="fg_hash" required>
+            <select class="form-control" name="fg_hash" id="fg_hash" required>
               <option>Left</option><option>Left Middle</option><option>Middle</option><option>Right Middle</option><option>Right</option>
             </select>
           </div>
         </div>
         <div class="form-group">
           <label>Result</label>
-          <select class="form-control" name="fg_result">
+          <select class="form-control" name="fg_result" id="fg_result">
             <option>Good</option><option>No Good</option>
           </select>
         </div>
@@ -74,12 +83,12 @@ document.addEventListener("DOMContentLoaded", () => {
   <div class="col-lg-4 mb-4">
     <div class="card p-3">
       <h2 class="h5 mb-3" style="color:#c90016;">Kickoff</h2>
-      <form method="POST">
+      <form method="POST" onsubmit="saveLastUsed()">
         <input type="hidden" name="action" value="save_kick">
         <input type="hidden" name="kick_type" value="Kickoff">
         <div class="form-group">
           <label>Kicker</label>
-          <select class="form-control" name="kicker" required>
+          <select class="form-control" name="kicker" id="ko_kicker" required>
             <option>29</option><option>92</option><option>82</option><option>95</option>
           </select>
         </div>
@@ -90,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <div class="form-group col-6">
             <label>Hash</label>
-            <select class="form-control" name="ko_hash" required>
+            <select class="form-control" name="ko_hash" id="ko_hash" required>
               <option>Left</option><option>Left Middle</option><option>Middle</option><option>Right Middle</option><option>Right</option>
             </select>
           </div>
@@ -102,8 +111,10 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <div class="form-group col-6">
             <label>Landing Location</label>
-            <select class="form-control" name="ko_location">
+            <select class="form-control" name="ko_location" id="ko_land">
               <option>Left</option><option>Left Middle</option><option>Middle</option><option>Right Middle</option><option>Right</option>
+              <option>outside hash left</option><option>outside hash right</option>
+              <option>out of bounds left</option><option>out of bounds right</option>
             </select>
           </div>
         </div>
@@ -125,18 +136,18 @@ document.addEventListener("DOMContentLoaded", () => {
   <div class="col-lg-4 mb-4">
     <div class="card p-3">
       <h2 class="h5 mb-3" style="color:#c90016;">Punt</h2>
-      <form method="POST">
+      <form method="POST" onsubmit="saveLastUsed()">
         <input type="hidden" name="action" value="save_kick">
         <input type="hidden" name="kick_type" value="Punt">
         <div class="form-group">
           <label>Kicker</label>
-          <select class="form-control" name="kicker" required>
+          <select class="form-control" name="kicker" id="p_kicker" required>
             <option>29</option><option>92</option><option>82</option><option>95</option>
           </select>
         </div>
         <div class="form-group">
           <label>Longsnapper</label>
-          <select class="form-control" name="longsnapper" required>
+          <select class="form-control" name="longsnapper" id="p_longsnapper" required>
             <option>58</option><option>61</option>
           </select>
         </div>
@@ -147,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <div class="form-group col-6">
             <label>Kick Location</label>
-            <select class="form-control" name="punt_kick_loc">
+            <select class="form-control" name="punt_kick_loc" id="p_kick_hash">
               <option>Left</option><option>Left Middle</option><option>Middle</option><option>Right Middle</option><option>Right</option>
             </select>
           </div>
@@ -159,8 +170,10 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <div class="form-group col-6">
             <label>Landed Location</label>
-            <select class="form-control" name="punt_landed_loc">
+            <select class="form-control" name="punt_landed_loc" id="p_land">
               <option>Left</option><option>Left Middle</option><option>Middle</option><option>Right Middle</option><option>Right</option>
+              <option>outside hash left</option><option>outside hash right</option>
+              <option>out of bounds left</option><option>out of bounds right</option>
             </select>
           </div>
         </div>
@@ -197,9 +210,9 @@ document.addEventListener("DOMContentLoaded", () => {
         </button>
       </div>
       <div class="modal-body text-center">
-        <input type="text" class="form-control mb-3 text-center" id="keypadInput" value="" readonly>
+        <input type="text" class="form-control mb-3 text-center" id="keypadInput" value="" readonly style="color:#fff;background:#000;border:1px solid #444;border-radius:10px;font-size:2rem;">
         <div class="btn-group btn-group-lg d-flex flex-wrap" role="group" aria-label="Keypad">
-          {% for n in range(1,10) %}
+          {% for n in range(1,9+1) %}
           <button type="button" class="btn btn-outline-primary m-1 keypad-btn" onclick="keypad.press('{{n}}')">{{n}}</button>
           {% endfor %}
           <button type="button" class="btn btn-outline-primary m-1 keypad-btn" onclick="keypad.toggleSign()">±</button>
@@ -213,4 +226,262 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   </div>
 </div>
+
+<!-- Side Drawer -->
+<style>
+.drawer{ position: fixed; top:0; right:-360px; width:360px; height:100%; background:#0c0c0c; color:#fff; border-left:1px solid #2a2a2a; z-index:1050; transition:right .25s ease; display:flex; flex-direction:column; }
+.drawer.open{ right:0; }
+.drawer-header{ padding:12px 16px; border-bottom:1px solid #2a2a2a; display:flex; justify-content:space-between; align-items:center; }
+.drawer-body{ overflow:auto; padding:8px 0; }
+.drawer-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:1040; display:none; }
+.drawer-backdrop.open{ display:block; }
+.kick-item{ padding:10px 16px; border-bottom:1px solid #1a1a1a; cursor:pointer; }
+.kick-item:hover{ background:#121212; }
+.badge-type{ font-size:.75rem; border:1px solid #2a2a2a; padding:2px 6px; border-radius:999px; margin-right:6px; }
+</style>
+
+<div id="kicksDrawer" class="drawer" aria-hidden="true">
+  <div class="drawer-header">
+    <h5 class="m-0">Session Kicks</h5>
+    <button type="button" class="close text-light" onclick="drawerClose()">&times;</button>
+  </div>
+  <div id="kicksList" class="drawer-body">
+    <!-- populated by JS -->
+  </div>
+</div>
+<div id="drawerBackdrop" class="drawer-backdrop" onclick="drawerClose()"></div>
+
+<!-- Edit Kick Modal -->
+<div class="modal fade" id="editKickModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content bg-black text-light">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Kick</h5>
+        <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <form id="editKickForm">
+          <input type="hidden" id="edit_id">
+
+          <div class="form-group">
+            <label>Kick Type</label>
+            <select class="form-control" id="edit_type" onchange="toggleTypeFields(this.value)">
+              <option>Field Goal</option>
+              <option>Kickoff</option>
+              <option>Punt</option>
+            </select>
+          </div>
+
+          <!-- Common -->
+          <div class="form-group"><label>Kicker</label><input class="form-control" id="edit_kicker"></div>
+          <div class="form-group"><label>Holder</label><input class="form-control" id="edit_holder"></div>
+          <div class="form-group"><label>Longsnapper</label><input class="form-control" id="edit_longsnapper"></div>
+
+          <!-- FG fields -->
+          <div id="fg_fields">
+            <div class="form-group"><label>FG Yard Line</label><input class="form-control" id="edit_fg_yl"></div>
+            <div class="form-group"><label>FG Hash</label><input class="form-control" id="edit_fg_hash"></div>
+            <div class="form-group"><label>FG Result</label><input class="form-control" id="edit_fg_result"></div>
+            <div class="form-group"><label>FG Op Time</label><input class="form-control" id="edit_fg_op"></div>
+          </div>
+
+          <!-- KO fields -->
+          <div id="ko_fields" style="display:none">
+            <div class="form-group"><label>KO Yard Line</label><input class="form-control" id="edit_ko_yl"></div>
+            <div class="form-group"><label>KO Hash</label><input class="form-control" id="edit_ko_hash"></div>
+            <div class="form-group"><label>Result Yard Line</label><input class="form-control" id="edit_ko_resyl"></div>
+            <div class="form-group"><label>Landing Location</label><input class="form-control" id="edit_ko_land"></div>
+            <div class="form-group"><label>Hang Time</label><input class="form-control" id="edit_ko_hang"></div>
+          </div>
+
+          <!-- Punt fields -->
+          <div id="punt_fields" style="display:none">
+            <div class="form-group"><label>Punt Kick Yard Line</label><input class="form-control" id="edit_p_ky"></div>
+            <div class="form-group"><label>Punt Kick Hash</label><input class="form-control" id="edit_p_khash"></div>
+            <div class="form-group"><label>Punt Landed Yard Line</label><input class="form-control" id="edit_p_ly"></div>
+            <div class="form-group"><label>Punt Landing Location</label><input class="form-control" id="edit_p_land"></div>
+            <div class="form-group"><label>Snap</label><input class="form-control" id="edit_p_snap"></div>
+            <div class="form-group"><label>Hand-to-Foot</label><input class="form-control" id="edit_p_h2f"></div>
+            <div class="form-group"><label>Hang</label><input class="form-control" id="edit_p_hang"></div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="saveKickEdits()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Side Drawer / Edit Modal / Last-used JS -->
+<script>
+// ----- Drawer -----
+const drawer = {
+  el: document.getElementById('kicksDrawer'),
+  backdrop: document.getElementById('drawerBackdrop')
+};
+document.getElementById('openDrawerBtn').addEventListener('click', (e)=>{
+  e.preventDefault(); drawerOpen(); loadKicks();
+});
+function drawerOpen(){ drawer.el.classList.add('open'); drawer.backdrop.classList.add('open'); }
+function drawerClose(){ drawer.el.classList.remove('open'); drawer.backdrop.classList.remove('open'); }
+
+// ----- Summaries & distances (client side quick labels) -----
+function summarizeKick(k){
+  const type = k['Kick Type'] || '';
+  let dist = '';
+  if(type==='Field Goal'){
+    const yl = (k['Field Goal_Yard Line']||'').toString().replace('+','').replace('-','');
+    if(yl) dist = (parseInt(yl,10)+18)+'';
+  } else if(type==='Kickoff'){
+    dist = k['Kickoff_Distance'] || '';
+  } else if(type==='Punt'){
+    dist = k['Punt_Distance'] || '';
+  }
+  const res = k['Field Goal_Result'] || '';
+  return { type, dist, res };
+}
+
+// ----- Load kicks into drawer -----
+async function loadKicks(){
+  const list = document.getElementById('kicksList');
+  list.innerHTML = '<div class="p-3 text-muted">Loading…</div>';
+  try{
+    const resp = await fetch('/kicks'); const data = await resp.json();
+    if(!Array.isArray(data) || data.length===0){ list.innerHTML = '<div class="p-3 text-muted">No kicks yet.</div>'; return; }
+    list.innerHTML = '';
+    data.forEach(k=>{
+      const s = summarizeKick(k);
+      const el = document.createElement('div');
+      el.className = 'kick-item';
+      el.innerHTML = `
+        <div class="d-flex align-items-center">
+          <span class="badge-type">${s.type}</span>
+          <span class="flex-grow-1">${s.dist ? 'Distance: '+s.dist : ''}</span>
+          <span>${s.res || ''}</span>
+        </div>
+      `;
+      el.onclick = ()=> openEditModal(k.id);
+      list.appendChild(el);
+    });
+  }catch(err){
+    list.innerHTML = '<div class="p-3 text-danger">Failed to load kicks.</div>';
+  }
+}
+
+// ----- Toggle modal sections by type -----
+function toggleTypeFields(type){
+  document.getElementById('fg_fields').style.display = (type==='Field Goal') ? '' : 'none';
+  document.getElementById('ko_fields').style.display = (type==='Kickoff') ? '' : 'none';
+  document.getElementById('punt_fields').style.display = (type==='Punt') ? '' : 'none';
+}
+
+// ----- Open modal & load kick -----
+async function openEditModal(id){
+  const r = await fetch(`/kick/${id}`); const k = await r.json();
+  if(k.error){ alert('Kick not found'); return; }
+  document.getElementById('edit_id').value = k.id || '';
+  document.getElementById('edit_type').value = k['Kick Type'] || 'Field Goal';
+  toggleTypeFields(document.getElementById('edit_type').value);
+
+  // Common
+  document.getElementById('edit_kicker').value = k['Kicker'] || '';
+  document.getElementById('edit_holder').value = k['Holder'] || '';
+  document.getElementById('edit_longsnapper').value = k['Longsnapper'] || '';
+
+  // FG
+  document.getElementById('edit_fg_yl').value = k['Field Goal_Yard Line'] || '';
+  document.getElementById('edit_fg_hash').value = k['Field Goal_Position'] || '';
+  document.getElementById('edit_fg_result').value = k['Field Goal_Result'] || '';
+  document.getElementById('edit_fg_op').value = k['Field Goal_Op Time'] || '';
+
+  // KO
+  document.getElementById('edit_ko_yl').value = k['Kickoff_Yard Line'] || '';
+  document.getElementById('edit_ko_hash').value = k['Kickoff_Position'] || '';
+  document.getElementById('edit_ko_resyl').value = k['Kickoff_Result Yard Line'] || '';
+  document.getElementById('edit_ko_land').value = k['Kickoff_Landing Location'] || '';
+  document.getElementById('edit_ko_hang').value = k['Kickoff_Hang Time'] || '';
+
+  // Punt
+  document.getElementById('edit_p_ky').value = k['Punt_Kick Yard Line'] || '';
+  document.getElementById('edit_p_khash').value = k['Punt_Kick Location'] || '';
+  document.getElementById('edit_p_ly').value = k['Punt_Landed Yard Line'] || '';
+  document.getElementById('edit_p_land').value = k['Punt_Landing Location'] || '';
+  document.getElementById('edit_p_snap').value = k['Punt_Snap Time'] || '';
+  document.getElementById('edit_p_h2f').value = k['Punt_Hand to Foot'] || '';
+  document.getElementById('edit_p_hang').value = k['Punt_Hang Time'] || '';
+
+  $('#editKickModal').modal('show');
+}
+
+// ----- Save edits -----
+async function saveKickEdits(){
+  const id = document.getElementById('edit_id').value;
+  const type = document.getElementById('edit_type').value;
+  const payload = {
+    'Kick Type': type,
+    'Kicker': document.getElementById('edit_kicker').value,
+    'Holder': document.getElementById('edit_holder').value,
+    'Longsnapper': document.getElementById('edit_longsnapper').value,
+    'Field Goal_Yard Line': document.getElementById('edit_fg_yl').value,
+    'Field Goal_Position': document.getElementById('edit_fg_hash').value,
+    'Field Goal_Result': document.getElementById('edit_fg_result').value,
+    'Field Goal_Op Time': document.getElementById('edit_fg_op').value,
+    'Kickoff_Yard Line': document.getElementById('edit_ko_yl').value,
+    'Kickoff_Position': document.getElementById('edit_ko_hash').value,
+    'Kickoff_Result Yard Line': document.getElementById('edit_ko_resyl').value,
+    'Kickoff_Landing Location': document.getElementById('edit_ko_land').value,
+    'Kickoff_Hang Time': document.getElementById('edit_ko_hang').value,
+    'Punt_Kick Yard Line': document.getElementById('edit_p_ky').value,
+    'Punt_Kick Location': document.getElementById('edit_p_khash').value,
+    'Punt_Landed Yard Line': document.getElementById('edit_p_ly').value,
+    'Punt_Landing Location': document.getElementById('edit_p_land').value,
+    'Punt_Snap Time': document.getElementById('edit_p_snap').value,
+    'Punt_Hand to Foot': document.getElementById('edit_p_h2f').value,
+    'Punt_Hang Time': document.getElementById('edit_p_hang').value
+  };
+  const resp = await fetch(`/kick/${id}`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  });
+  if(resp.ok){
+    $('#editKickModal').modal('hide');
+    loadKicks();
+  } else {
+    alert('Save failed');
+  }
+}
+
+// ----- Last-used defaults (exclude stopwatches) -----
+function saveLastUsed() {
+  const fields = [
+    'fg_kicker','fg_holder','fg_longsnapper','fg_yl','fg_hash','fg_result',
+    'ko_kicker','ko_yl','ko_hash','ko_res_yl','ko_land',
+    'p_kicker','p_longsnapper','punt_kyl','p_kick_hash','punt_lyl','p_land'
+  ];
+  const state = {};
+  fields.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) state[id] = el.value;
+  });
+  localStorage.setItem('kick_last_used', JSON.stringify(state));
+}
+function applyLastUsed() {
+  const raw = localStorage.getItem('kick_last_used');
+  if(!raw) return;
+  try{
+    const state = JSON.parse(raw);
+    Object.entries(state).forEach(([id,val])=>{
+      const el = document.getElementById(id);
+      if(el && val != null) el.value = val;
+    });
+  }catch(e){}
+}
+document.addEventListener('DOMContentLoaded', applyLastUsed);
+
+// ----- Wire drawer close on ESC -----
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') drawerClose(); });
+</script>
 {% endblock %}
